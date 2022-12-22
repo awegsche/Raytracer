@@ -1,6 +1,0 @@
-[submodule "ext/glfw"]
-	path = ext/glfw
-	url = git@github.com:glfw/glfw.git
-[submodule "ext/glew"]
-	path = ext/glew
-	url = git@github.com:nigels-com/glew.git
