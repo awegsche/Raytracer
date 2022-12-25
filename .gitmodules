@@ -1,0 +1,3 @@
+[submodule "ext/dear_spdlog"]
+	path = ext/dear_spdlog
+	url = git@github.com:awegsche/dear_spdlog.git
