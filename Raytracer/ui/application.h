@@ -8,6 +8,7 @@
 #include <cuda.h>
 #include <optix.h>
 #include <iostream>
+#include <memory>
 
 #include <dear_sink.h>
 #include <imgui.h>
@@ -18,9 +19,8 @@
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
 
-#include "utils/cuda_helpers.h"
-#include "utils/optix_helpers.h"
 #include "utils/timer.h"
+#include "ui/cu_application.h"
 
 using std::cout, std::cerr, std::endl;
 using std::chrono::steady_clock;
@@ -37,17 +37,14 @@ class Application {
 
     bool m_glfw_valid = false;
     bool m_is_valid   = false;
+    bool render_gpu   = true;
 
     // debug
     dear_sink_mt_t m_sink;
     FpsCounter m_fps_counter;
     float m_fps;
 
-    // cuda
-    CUcontext m_cuda_context;
-    CUstream m_cuda_stream;
-
-
+    std::unique_ptr<CUApplication> m_cu_application;
 
     // debugging, this should be moved into subclasses
     float m_cam_fov = 90.0f;

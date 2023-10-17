@@ -4,7 +4,7 @@
 #include "Raytracer.h"
 
 #include <spdlog/spdlog.h>
-#include "ui/Application.h"
+#include "ui/application.h"
 
 using std::cout, std::endl;
 
@@ -12,7 +12,7 @@ int main() {
     cout << "Hello CMake." << endl;
     spdlog::info("info");
 
-    Application app(2048, 1440);
+    Application app(1440, 1024);
 
     spdlog::info("info");
 

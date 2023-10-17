@@ -1,8 +1,9 @@
 #include "application.h"
+#include <spdlog/spdlog.h>
 
 Application::Application(int width, int height)
     : m_window_width(width), m_window_height(height), left_margin(static_cast<int>(0.25f * width)),
-      m_fps_counter(1000), m_cuda_context(nullptr), m_cuda_stream(nullptr) {
+      m_fps_counter(1000) {
 
     // init GLFW
     if (!glfwInit()) {
@@ -33,8 +34,10 @@ Application::Application(int width, int height)
     ImGui_ImplOpenGL3_Init();
 
     auto &io = ImGui::GetIO();
+    /*
     io.Fonts->AddFontFromFileTTF(
         "C:\\Users\\andiw\\AppData\\Local\\Microsoft\\Windows\\Fonts\\FiraCode-SemiBold.ttf", 30.0f);
+        */
 
     ImGui_ImplOpenGL3_NewFrame();
     ImGui_ImplGlfw_NewFrame();
@@ -56,38 +59,12 @@ Application::Application(int width, int height)
     glDisable(GL_CULL_FACE);
     glDisable(GL_DEPTH_TEST);
 
-    // init CUDA and OptiX
-    // note: here we call `cuda_helpers::check` which is slightly more overhead because we are
-    // in initialisation which is only called once at the start and is certainly not hot code
-    spdlog::info("setup CUDA and OptiX");
-    if (!cuda_helpers::check(cuInit(0), "failed initialising CUDA"))
-        return;
+    m_cu_application = CUApplication::make_application();
 
-    CUdevice device = 0;
-    if (!cuda_helpers::check(cuCtxCreate(&m_cuda_context, CU_CTX_SCHED_SPIN, device),
-                             "creating CUDA context failed"))
-        return;
-
-    if (!cuda_helpers::check(cuStreamCreate(&m_cuda_stream, CU_STREAM_DEFAULT),
-                             "creating CUDA stream failed"))
-        return;
-
-#ifdef _WIN32
-    void *handle = optix_helpers::optix_load_windows_dll();
-    if (!handle) {
-        spdlog::error("OptiX DLL not found");
-        return;
+    if (!m_cu_application) {
+        render_gpu = false;
+        spdlog::warn("GPU rendering disabled");
     }
-    void *symbol =
-        reinterpret_cast<void *>(GetProcAddress((HMODULE)handle, "optixQueryFunctionTable"));
-    if (!symbol) {
-        spdlog::error("Optix Query Function Table Symbol not found");
-        return;
-    }
-#else
-    spdlog::error("optix DLL loading on non-WIN32 platforms not yet supported");
-    return;
-#endif
 
     // now we can safely set this to valid
     m_is_valid = true;
@@ -148,6 +125,7 @@ void Application::end_frame() const {
 
 void Application::get_system_information() {
 
+    /*
     int versionDriver = 0;
     CU_CHECK( cuDriverGetVersion(&versionDriver) );
 
@@ -279,4 +257,5 @@ void Application::get_system_information() {
 
         m_deviceAttributes.push_back(attr);
     }
+        */
 }

@@ -6,9 +6,8 @@ bool cuda_helpers::check(CUresult result, char const *message) {
         // this can also fail
         auto _res = cuGetErrorName(result, &cu_err_name);
         if (_res != CUDA_SUCCESS) {
-            spdlog::error("checking CUDA result failed with error code {}. This might happen "
-                          "because CUDA failed to initialise prior to this call",
-                          _res);
+            spdlog::error("checking CUDA result failed with error code {}. This might happen because CUDA failed to initialise prior to this call",
+                          static_cast<int>(_res));
             return false;
         }
         if (message)

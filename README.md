@@ -13,7 +13,8 @@ A Raytracer written in C++ and CUDA using NVidia's OptiX raytracing pipeline.
 - Any version of Visual Studio starting from 2019.
 _Note: Also CLion worked fine, I didn't get to the point of debugging the CUDA code yet, though_
 - [CUDA Toolkit](https://developer.nvidia.com/cuda-toolkit), version 10+
-- [OptiX SDK](https://developer.nvidia.com/rtx/ray-tracing/optix) version 7.6+
+- [OptiX SDK](https://developer.nvidia.com/rtx/ray-tracing/optix) version 7.6+,
+    extract it into this source dir and rename it to `OptiX_SDK`
 
 #### **External Packages**
 
@@ -23,22 +24,12 @@ _Note: Also CLion worked fine, I didn't get to the point of debugging the CUDA c
 
 ### Instructions
 
-With the [main prerequisites](#main-prerequisites) installed, we need to get the CUDA toolkit and OptiX SDK into `ENV`.
+With the [main prerequisites](#main-prerequisites) installed, we need to follow the following steps:
 
 For this, environment variables need to be present:
 - `CUDA_PATH` pointing to the install dir of the CUDA toolkit
-- `OptiX76_PATH` pointing to the OptiX7.6 directory
 
-In the main `CMakeLists.txt` add:
-
-```cmake 
-set(CMAKE_MODULE_PATH "ext/CMake")
-```
-
-and in the direcory `ext/CMake` we need the following "modules":
-[FindOptiX76.cmake](ext/CMake/FindOptiX76.cmake) and [nvcuda_compile_module.cmake](ext/CMake/nvcuda_compile_module.cmake).
-
-Then, try get external packages.
+#### Then, try get external packages.
 There are two ways of doing that:
 
 1. C++ package manager (conan, vcpkg, etc)
